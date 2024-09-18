@@ -88,7 +88,7 @@ class CriticNetwork(nn.Module):
 
         self.checkpoint_file = os.path.join(chkpt_dir, 'critic_chkpt_final')
 
-        input_dims = input_dims[0]  # Unpack input dimensions
+        input_dims = input_dims[0]  
 
         self.critic = nn.Sequential(
             nn.Linear(input_dims, fc1_dims),
@@ -138,23 +138,17 @@ class Agent:
         self.critic.load_checkpoint()
 
     def choose_action(self, observation):
-        # if len(observation) != 4:
-        #     raise ValueError(f"Unexpected observation shape: {len(observation)}. Expected 4.")
-        
-        # state = T.tensor(observation, dtype=T.float).unsqueeze(0).to(self.actor.device)
 
-    # Extract the actual observation from the tuple
         if isinstance(observation, tuple):
             state = observation[0]
         else:
             state = observation
         
-        # Ensure the observation is a numpy array or list and has the correct shape
-        state = np.array(state, dtype=np.float32)  # Convert to numpy array if needed
+        state = np.array(state, dtype=np.float32)  
         if state.shape[0] != 4:
             raise ValueError(f"Unexpected observation shape: {state.shape}. Expected (4,).")
         
-        state = T.tensor(state, dtype=T.float).unsqueeze(0).to(self.actor.device)  # Convert to tensor and add batch dimension
+        state = T.tensor(state, dtype=T.float).unsqueeze(0).to(self.actor.device)  
     
     
         dist = self.actor(state)
@@ -174,7 +168,6 @@ class Agent:
             
             state_arr = np.array([state[0] if isinstance(state, tuple) else state for state in state_arr])
 
-            # Ensure the array is of the right shape
             state_arr = np.stack(state_arr)
 
             values = vals_arr
